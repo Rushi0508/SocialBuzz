@@ -9,7 +9,13 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='signin')
 def index(req):
-    return render(req, 'index.html')
+    user_object = User.objects.get(username=req.user.username)
+    user_profile = Profile.objects.get(user=user_object)
+    return render(req, 'index.html', {'user_profile' : user_profile})
+
+@login_required(login_url='signin')
+def upload(req):
+    pass
 
 @login_required(login_url='signin')
 def settings(req):
