@@ -7,17 +7,17 @@ from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
-@login_required(login_url='signin')
+@login_required(login_url='/signin')
 def index(req):
     user_object = User.objects.get(username=req.user.username)
     user_profile = Profile.objects.get(user=user_object)
     return render(req, 'index.html', {'user_profile' : user_profile})
 
-@login_required(login_url='signin')
+@login_required(login_url='/signin')
 def upload(req):
     pass
 
-@login_required(login_url='signin')
+@login_required(login_url='/signin')
 def settings(req):
     user_profile = Profile.objects.get(user=req.user)
 
@@ -41,7 +41,6 @@ def settings(req):
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
-        
         return redirect('settings')
     return render(req, 'setting.html', {'user_profile': user_profile})
 
@@ -54,6 +53,8 @@ def signin(req):
 
         if(user is not None):
             auth.login(req,user)
+            if(req.GET['next']):
+                return redirect(req.GET['next']);
             return redirect('/')
         else:
             messages.info(req, 'Username or Password is incorrect')
@@ -61,7 +62,7 @@ def signin(req):
     else:
         return render(req, 'signin.html')
         
-@login_required(login_url='signin')
+@login_required(login_url='/signin')
 def logout(req):
     auth.logout(req)
     return redirect('signin')
