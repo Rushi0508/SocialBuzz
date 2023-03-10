@@ -53,9 +53,11 @@ def signin(req):
 
         if(user is not None):
             auth.login(req,user)
-            if(req.GET['next']):
-                return redirect(req.GET['next']);
-            return redirect('/')
+            try:
+                next = req.GET['next'];
+            except:
+                next = '/';
+            return redirect(next);
         else:
             messages.info(req, 'Username or Password is incorrect')
             return redirect('signin')
