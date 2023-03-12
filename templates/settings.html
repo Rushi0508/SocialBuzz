@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign Up - Social Buzz</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+  {% include 'navbar.html' %}
+  <h3 class="text-center">Account Settings for <p class="text-primary"><i>{{user_profile.user}}</i></p></h3>
+  <div class="container d-flex justify-content-center align-items-center my-3">
+    <div class="row d-flex justify-content-center align-items-center">
+      <div class="col-md-5">
+        <div class="card shadow">
+          <div class="card-body">
+            <form action="" enctype="multipart/form-data" method="POST" class="validated-form" novalidate>
+              {% csrf_token %}
+              <div class="mb-3">
+                <div class="text-center">
+                    <img width="200" height="200" class="rounded-circle" src="{{user_profile.profileimg.url}}" /><br>
+                    <button class="btn btn-success my-2">Update</button>
+                    <div class="form-file custom-file d-none">
+                        <input class="form-control" type="file" name="image" id="image">
+                    </div>
+                </div>
+              </div>
+              <div class="text-center">
+                {% for message in messages %}
+                  <h6 class="text-danger">{{message}}</h6>
+                {% endfor %}
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="name">Name*</label>
+                <input class="form-control" value="{{user_profile.name}}" type="text" id="name" name="name" required autofocus>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="username">Username*</label>
+                <input class="form-control" type="text" value="{{user_profile.user}}" id="username" name="username" required autofocus>
+                <div class="valid-feedback">
+                    Looks good!
+                </div>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="bio">Bio</label>
+                <textarea class="form-control" type="text" id="bio" name="bio" autofocus cols="30" rows="2">{{user_profile.bio}}</textarea>
+              </div>
+              <div class="mb-3">
+                <label class="form-label" for="location">Location</label>
+                <input class="form-control" value="{{user_profile.location}}" type="text" id="location" name="location" autofocus>
+              </div>
+              <div class="text-right">
+                <a href="/profile" class="text-primary text-decoration-none mr-2">Cancel</a>
+                <button type="submit" class="btn btn-primary py-1">Save</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <script>
+    const update = document.querySelector('.btn-success');
+    const file = document.querySelector('.d-none')
+    update.addEventListener("click", (e)=>{
+        e.preventDefault();
+        console.log("HII");
+        file.classList.remove('d-none');
+    })
+  </script>
+<script src="../static/js/validateForms.js"></script>
+</body>
+
+</html>

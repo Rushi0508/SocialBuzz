@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Profile,Post
+from .models import Profile,Post,LikePost
 from django.contrib.auth.decorators import login_required
 
 # Create your views here.
@@ -13,8 +13,7 @@ def index(req):
     user_profile = Profile.objects.get(user=user_object)
 
     posts = Post.objects.all();
-
-    return render(req, 'index.html', {'user_profile' : user_profile, 'posts' : posts})
+    return render(req, 'home.html', {'user_profile' : user_profile, 'posts' : posts})
 
 @login_required(login_url='/signin')
 def upload(req):
@@ -28,21 +27,52 @@ def upload(req):
         return redirect('/');
     else:
         return redirect('/');
-          
-        
+
+@login_required(login_url='/signin')
+def likepost(req):
+    username = req.user.username
+    post_id = req.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+    if(like_filter == None):
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.likes = post.likes + 1
+        post.save()
+        return HttpResponse(post.likes)
+        # return redirect('/')
+    else:
+        like_filter.delete()
+        post.likes = post.likes - 1
+        post.save()
+        return HttpResponse(post.likes)
+        # return redirect('/')
 
 @login_required(login_url='/signin')
 def settings(req):
     user_profile = Profile.objects.get(user=req.user)
 
     if (req.method == 'POST'):
-        
+        if(req.POST['username']!=req.user.username):
+            username = req.POST['username']
+            if(User.objects.filter(username=username).exists()):
+                messages.info(req,'Username already exists')
+                return redirect('/settings')
+            else:
+                new_username = User.objects.get(username=req.user.username);
+                new_username.username = username;
+                new_username.save();
         if (req.FILES.get('image') == None):
             image = user_profile.profileimg
             bio = req.POST['bio']
             location = req.POST['location']
+            name = req.POST['name']
+
 
             user_profile.profileimg = image
+            user_profile.name = name
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
@@ -50,13 +80,15 @@ def settings(req):
             image = req.FILES.get('image')
             bio = req.POST['bio']
             location = req.POST['location']
+            name = req.POST['name']
 
             user_profile.profileimg = image
+            user_profile.name = name
             user_profile.bio = bio
             user_profile.location = location
             user_profile.save()
         return redirect('settings')
-    return render(req, 'setting.html', {'user_profile': user_profile})
+    return render(req, 'settings.html', {'user_profile': user_profile})
 
 def signin(req):
     if(req.method=='POST'):
