@@ -117,8 +117,8 @@
 
         <ul class="about p-0">
           <li><span>{{user_post_length}}</span>Posts</li>
-          <li><span>4,073</span>Followers</li>
-          <li><span>322</span>Following</li>
+          <li><span class="followers">{{user_followers}}</span>Followers</li>
+          <li><span class="following">{{user_following}}</span>Following</li>
         </ul>
 
         <div class="content">
@@ -129,7 +129,19 @@
       </div>
       <div class="right__col">
         <nav>
-          <button class="btn btn-primary">Follow</button>
+          {% if curr_user_profile.user.username == user_profile.user.username %}
+          <a href="/settings"><button  type="submit" class="btn btn-secondary followbtn">Edit Profile</button></a>
+          {% else %}
+          <form action="" class="form-submit">
+            <input type="hidden" class="follower" name="follower" value="{{curr_user_profile.user.username}}">
+            <input type="hidden" class="user" name="user" value="{{user_profile.user.username}}">
+            {% if follow_status == 'Follow' %}
+            <a class="btn btn-primary followbtn">{{follow_status}}</a>
+            {% else %}
+            <a class="btn btn-dark followbtn">{{follow_status}}</a>
+            {% endif %}
+          </form>
+          {% endif %}
         </nav>
 
         <div class="photos">
@@ -205,6 +217,34 @@
                 }else{
                     $('#likes-'+postid).text("Liked by "+ data + " people");
                 }
+            }
+        })
+    });
+    $('.followbtn').click(function(e){
+        e.stopPropagation();
+        var $form = $(this).closest(".form-submit");
+        var follower =  $form.find(".follower").val();
+        var user =  $form.find(".user").val();
+        console.log(follower + user);
+        $.ajax(
+        {
+            type:"GET",
+            url: "/follow",
+            data:{
+                follower : follower,
+                user : user
+            },
+            success: function( data ) 
+            {
+              // console.log(data);
+              $('.followers').text(data.data.followerCount)
+              if(data.data.isFollowed){
+                $(".followbtn").text("Unfollow");
+                $(".followbtn").css("background-color", "#343a40");
+              }else{
+                $(".followbtn").css("background-color", "#0d6efd");
+                $(".followbtn").text("Follow");
+              }
             }
         })
     });

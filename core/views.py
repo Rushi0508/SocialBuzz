@@ -2,9 +2,9 @@ from django.shortcuts import render,redirect
 from django.contrib.auth.models import User,auth
 from django.http import HttpResponse
 from django.contrib import messages
-from .models import Profile,Post,LikePost
+from .models import Profile,Post,LikePost,FollowerCount
 from django.contrib.auth.decorators import login_required
-
+import json
 # Create your views here.
 
 @login_required(login_url='/signin')
@@ -23,14 +23,25 @@ def profile(req,pk):
     user_profile = Profile.objects.get(user=user_object)
     user_posts = Post.objects.filter(user=pk)
     user_post_length = len(user_posts);
+    user_followers = FollowerCount.objects.filter(user=pk)
+    user_following = FollowerCount.objects.filter(follower=pk)
 
+    follower = req.user.username
+    user = pk
+    if(FollowerCount.objects.filter(follower=follower,user=user)):
+        follow_status = 'Unfollow'
+    else:
+        follow_status = 'Follow'
     context = {
         'curr_user_object' : curr_user_object,
         'curr_user_profile': Profile.objects.get(user=curr_user_object),
         'user_object':user_object,
         'user_profile':user_profile,
         'user_posts' : user_posts,
-        'user_post_length':user_post_length
+        'user_post_length':user_post_length,
+        'user_followers' : len(user_followers),
+        'user_following' : len(user_following),
+        'follow_status' : follow_status
     }
     return render(req,'profile.html',context)
 
@@ -68,6 +79,25 @@ def likepost(req):
         post.save()
         return HttpResponse(post.likes)
         # return redirect('/')
+
+@login_required(login_url='/signin')
+def follow(req):
+    follower = req.GET['follower']
+    user = req.GET['user']
+
+    if(FollowerCount.objects.filter(follower=follower, user=user).first()):
+        delete_follower = FollowerCount.objects.get(follower=follower, user=user)
+        delete_follower.delete()
+
+        followerCount = FollowerCount.objects.filter(user=user)
+        data = {'followerCount': len(followerCount), 'isFollowed': False}
+        return HttpResponse(json.dumps({'data': data}), content_type="application/json");
+    else:
+        add_follower = FollowerCount.objects.create(follower=follower,user=user)
+        add_follower.save()
+        followerCount = FollowerCount.objects.filter(user=user)
+        data = {'followerCount': len(followerCount), 'isFollowed': True}
+        return HttpResponse(json.dumps({'data': data}), content_type="application/json");
 
 @login_required(login_url='/signin')
 def settings(req):
