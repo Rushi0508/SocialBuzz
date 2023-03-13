@@ -1,182 +1,214 @@
-{% load static %}
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profile - {{user_profile.user.username}}</title>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <section class="h-100 gradient-custom-2">
+        <div class="container py-2 h-100">
+          <div class="row d-flex justify-content-center align-items-center h-100">
+            <div class="col col-lg-12 col-xl-7">
+              <div class="card">
+                <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
+                  <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
+                    <img src="{{user_profile.profileimg.url}}"
+                      alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                      style="width: 150px; z-index: 1">
+                      <b class="m-0 text-dark" style="z-index: 1;">@{{user_profile.user.username}}</b>
+                      <a href="/settings" type="button" class="btn btn-outline-dark mt-2" data-mdb-ripple-color="dark"
+                      style="z-index: 1;">
+                      Edit profile
+                    </a>
+                  </div>
+                  <div class="ms-3" style="margin-top: 130px;">
+                    <h5>{{user_profile.name}}</h5>
+                    <p>{{user_profile.location}}</p>
+                  </div>
+                </div>
+                <div class="p-4 text-black" style="background-color: #f8f9fa;">
+                  <div class="d-flex justify-content-end text-center py-1">
+                    <div>
+                      <p class="mb-1 h5">253</p>
+                      <p class="small text-muted mb-0">Photos</p>
+                    </div>
+                    <div class="px-3">
+                      <p class="mb-1 h5">1026</p>
+                      <p class="small text-muted mb-0">Followers</p>
+                    </div>
+                    <div>
+                      <p class="mb-1 h5">478</p>
+                      <p class="small text-muted mb-0">Following</p>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-4 text-black">
+                  <div class="mb-5">
+                    <p class="lead fw-normal mb-1">Bio</p>
+                    <div class="p-4" style="background-color: #f8f9fa;">
+                        {{user_profile.bio}}
+                    </div>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center mb-4">
+                    <p class="lead fw-normal mb-0">Recent photos</p>
+                    <p class="mb-0"><a href="#!" class="text-muted">Show all</a></p>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col mb-2">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(112).webp"
+                        alt="image 1" class="w-100 rounded-3">
+                    </div>
+                    <div class="col mb-2">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(107).webp"
+                        alt="image 1" class="w-100 rounded-3">
+                    </div>
+                  </div>
+                  <div class="row g-2">
+                    <div class="col">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(108).webp"
+                        alt="image 1" class="w-100 rounded-3">
+                    </div>
+                    <div class="col">
+                      <img src="https://mdbcdn.b-cdn.net/img/Photos/Lightbox/Original/img%20(114).webp"
+                        alt="image 1" class="w-100 rounded-3">
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</body>
+</html> -->
 
 <!DOCTYPE html>
 <html lang="en">
 
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="" />
-    <meta name="keywords" content="" />
-	<title>Profile - {{user_profile.user.username}}</title>
-   <!-- <link rel="icon" href="images/fav.png" type="image/png" sizes="16x16"> -->
-    
-    <link rel="stylesheet" href="{% static 'css/main.min.css' %}">
-    <link rel="stylesheet" href="{% static 'css/style.css' %}">
-    <link rel="stylesheet" href="{% static 'css/color.css' %}">
-    <link rel="stylesheet" href="{% static 'css/responsive.css' %}">
-
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Responsive Profile Page</title>
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <!-- CSS -->
+  <link rel="stylesheet" href="../static/css/profile.css" />
 </head>
+<style>
+  .likebutton, .photos>a{
+    cursor: pointer;
+  }
+</style>
 <body>
-<!--<div class="se-pre-con"></div>-->
-<div class="theme-layout">
-	
-	</div>
-	
-	<section>
-			<div class="feature-photo">
-				<figure><img src="{% static 'images/resources/timeline-1.jpg' %}" alt=""></figure>
-				<form action="/follow" method="POST">
-					{% csrf_token %}
-					<div class="add-btn">
-					<span style="color: white; font-size: 27px; margin-right: 520px;"><b><u><a href="/">Home</a></u></b></span>
-					
-					{% if user_post_length == 0 %}
-					<span style="color: white; font-size: 27px;"><b>No Post</b></span>
-					{% elif user_post_length == 1 %}
-					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Post</b></span>
-					{% else %}
-					<span style="color: white; font-size: 27px;"><b>{{user_post_length}} Posts</b></span>
-					{% endif %}
+  {% include 'navbar.html' %}
+  <div class="header__wrapper">
+    <div class="cols__container">
+      <div class="left__col pb-0">
+        <div class="img__container">
+          <img src="{{user_profile.profileimg.url}}" alt="Anna Smith" />
+        </div>
+        <h2 class="my-1">{{user_profile.name}}</h2>
+        <p class="my-1">{{user_profile.location}}</p>
+        <p class="my-1">@{{user_profile.user.username}}</p>
 
-					{% if user_followers == 0 or user_followers == 1 %}
-					<span style="color: white; font-size: 27px;"><b>{{user_followers}} follower</b></span>
-					{% else %}
-					<span style="color: white; font-size: 27px;"><b>{{user_followers}} followers</b></span>
-					{% endif %}
+        <ul class="about p-0">
+          <li><span>{{user_post_length}}</span>Posts</li>
+          <li><span>4,073</span>Followers</li>
+          <li><span>322</span>Following</li>
+        </ul>
 
+        <div class="content">
+          <p>
+            {{user_profile.bio}}
+          </p>
+        </div>
+      </div>
+      <div class="right__col">
+        <nav>
+          <button class="btn btn-primary">Follow</button>
+        </nav>
 
-					<span style="color: white; font-size: 27px;"><b>{{user_following}} following</b></span>
-
-					<input type="hidden" value="{{user.username}}" name="follower" />
-					<input type="hidden" value="{{user_object.username}}" name="user" />
-
-					{% if user_object.username == user.username %}
-					<a href="/settings" data-ripple="">Account Settings</a>
-					{% else %}
-					<a data-ripple=""><button type="submit" style="background-color: #ffc0cb; border: #ffc0cb;">{{button_text}}</button></a>
-					{% endif %}
-
-					</div>
-				</form>
-
-				<!-- <form class="edit-phto">
-					<i class="fa fa-camera-retro"></i>
-					<label class="fileContainer">
-						Upload Cover Photo
-					<input type="file"/>
-					</label>
-				</form> -->
-				<div class="container-fluid">
-					<div class="row merged">
-						<div class="col-lg-2 col-sm-3">
-							<div class="user-avatar">
-								<figure>
-									<img src="{{user_profile.profileimg.url}}" style="height: 250px; width: 100%;" alt="">
-									<!-- <form class="edit-phto">
-										<i class="fa fa-camera-retro"></i>
-										<label class="fileContainer">
-											<a href="#account-settings">Upload Profile Photo</a>
-										</label>
-									</form> -->
-								</figure>
-							</div>
-						</div>
-						<div class="col-lg-10 col-sm-9">
-							<div class="timeline-info">
-								<ul>
-									<li class="admin-name">
-									  <h5 style="color: black;white-space: nowrap; width: 110px; font-size: 27px;"><b>@{{user_profile.user.username}}</b><!--<i class="fa fa-check-circle" style="color: #48dbfb;" aria-hidden="true"></i>--></h5>
-									  <!--<span>Group Admin</span>-->
-									</li>
-									<!--<li>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Go live!</a>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Music</a>
-										<a class="" href="emporium/index-3.html" title="" data-ripple="">Emporium</a>
-										<a class="" href="fitness/index.html" title="" data-ripple="">Health Inspection</a>
-										<a class="" href="settings/account-setting.html" title="" data-ripple="">Settings</a>
-										<a class="" href="javascript:void(0)" title="" data-ripple="">Upload</a>
-										<a class="" href="time-line.html" title="" data-ripple="">time line</a>
-										<a class="" href="timeline-photos.html" title="" data-ripple="">Photos</a>
-										<a class="" href="timeline-videos.html" title="" data-ripple="">Videos</a>
-										<a class="" href="timeline-friends.html" title="" data-ripple="">Friends</a>
-										<a class="" href="timeline-groups.html" title="" data-ripple="">Groups</a>
-										<a class="" href="about.html" title="" data-ripple="">about</a>
-										<a class="" href="#" title="" data-ripple="">more</a>
-
-									</li>-->
-								</ul>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</section><!-- top area -->
-		<section>
-			<div class="bio">
-					{{user_profile.bio}}
-			</div>
-		</section>
-		
-	<section>
-		<div class="gap gray-bg">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-lg-12">
-						<div class="row" id="page-contents">
-							<div class="col-lg-3">
-								<aside class="sidebar static">
-									
-									
-									
-								</aside>
-							</div><!-- sidebar -->
-							
-
-
-
-
-
-
-
-
-
-							<div class="col-lg-6">
-								<div class="central-meta">
-									<ul class="photos">
-					
-										{% for post in user_posts %}
-										<li>
-											<a class="strip" href="{{post.image.url}}" title="" data-strip-group="mygroup" data-strip-group-options="loop: false">
-												<img src="{{post.image.url}}" style="height: 250px; width: 300px;" alt=""></a>
-										</li>
-										{% endfor %}
-										
-										
-										
-									</ul>
-									<!--<div class="lodmore"><button class="btn-view btn-load-more"></button></div>-->
-								</div><!-- photos -->
-							</div><!-- centerl meta -->
-							<div class="col-lg-3">
-								<aside class="sidebar static">
-									
-								</aside>
-							</div><!-- sidebar -->
-						</div>	
-					</div>
-				</div>
-			</div>
-		</div>	
-	</section>
-
-	
-	
-	<script data-cfasync="false" src="{% static '../../cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js' %}"></script><script src="{% static 'js/main.min.js' %}"></script>
-	<script src="{% static 'js/script.js' %}"></script>
-
-</body>	
-
+        <div class="photos">
+          {% for post in user_posts reversed %}
+          <a data-toggle="modal" data-target="#postModal-{{post.id}}"><img src="{{post.image.url}}"
+              alt="Photo"></a>
+          <div class="modal fade" id="postModal-{{post.id}}" role="dialog" aria-labelledby="postModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="card">
+                  <div class="card-header">
+                    <b><a class="text-dark" href="/profile/{{post.user}}">@{{post.user}}</a></span></b>
+                  </div>
+                  <div class="card-body p-0">
+                    <a href="{{post.image.url}}">
+                      <img src="{{post.image.url}}" alt="">
+                    </a>
+                  </div>
+                  <div class="card-footer">
+                    <form action="" class="form-submit">
+                      <div>
+                        <a class="text-dark"><i class="fa fa-thumbs-up likebutton" aria-hidden="true"></i></a>
+                        <input type="hidden" class="post-id" value="{{post.id}}">
+                        <i class="far fa-comment-o ml-2" aria-hidden="true"></i>
+                      </div>
+                      <p class="mb-1" id="likes-{{post.id}}">
+                        {% if post.likes == 0 %}
+                        No likes
+                        {% elif post.likes == 1 %}
+                        Liked by {{post.likes}} person
+                        {% else %}
+                        Liked by {{post.likes}} people
+                        {% endif %}
+                      </p>
+                    </form>
+                    {% if post.caption != "" %}
+                    <p class="mb-1">
+                      <a href="/profile/{{post.user}}" class="text-dark"><strong>{{post.user}}</strong></a>
+                      {{post.caption}}
+                    </p>
+                    {% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script type="text/javascript">
+    $('.likebutton').click(function(e){
+        e.stopPropagation();
+        var $form = $(this).closest(".form-submit");
+        var postid =  $form.find(".post-id").val();
+        console.log(postid)
+        $.ajax(
+        {
+            type:"GET",
+            url: "/likepost",
+            data:{
+                    post_id: postid
+            },
+            success: function( data ) 
+            {
+                if (data == 0){
+                    $('#likes-'+postid).text("No Likes");
+                }
+                else if(data==1){
+                    $('#likes-'+postid).text("Liked by " + data + " person");
+                }else{
+                    $('#likes-'+postid).text("Liked by "+ data + " people");
+                }
+            }
+        })
+    });
+</script>
+</body>
 
 </html>

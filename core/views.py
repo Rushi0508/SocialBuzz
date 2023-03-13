@@ -9,11 +9,30 @@ from django.contrib.auth.decorators import login_required
 
 @login_required(login_url='/signin')
 def index(req):
-    user_object = User.objects.get(username=req.user.username)
-    user_profile = Profile.objects.get(user=user_object)
-
+    curr_user_object = User.objects.get(username=req.user.username)
+    curr_user_profile = Profile.objects.get(user=curr_user_object)
     posts = Post.objects.all();
-    return render(req, 'home.html', {'user_profile' : user_profile, 'posts' : posts})
+    return render(req, 'home.html', {'curr_user_profile' : curr_user_profile, 'posts' : posts})
+
+
+
+@login_required(login_url='/signin')
+def profile(req,pk):
+    curr_user_object = User.objects.get(username=req.user.username)
+    user_object = User.objects.get(username=pk)
+    user_profile = Profile.objects.get(user=user_object)
+    user_posts = Post.objects.filter(user=pk)
+    user_post_length = len(user_posts);
+
+    context = {
+        'curr_user_object' : curr_user_object,
+        'curr_user_profile': Profile.objects.get(user=curr_user_object),
+        'user_object':user_object,
+        'user_profile':user_profile,
+        'user_posts' : user_posts,
+        'user_post_length':user_post_length
+    }
+    return render(req,'profile.html',context)
 
 @login_required(login_url='/signin')
 def upload(req):
@@ -52,7 +71,7 @@ def likepost(req):
 
 @login_required(login_url='/signin')
 def settings(req):
-    user_profile = Profile.objects.get(user=req.user)
+    curr_user_profile = Profile.objects.get(user=req.user)
 
     if (req.method == 'POST'):
         if(req.POST['username']!=req.user.username):
@@ -65,30 +84,30 @@ def settings(req):
                 new_username.username = username;
                 new_username.save();
         if (req.FILES.get('image') == None):
-            image = user_profile.profileimg
+            image = curr_user_profile.profileimg
             bio = req.POST['bio']
             location = req.POST['location']
             name = req.POST['name']
 
 
-            user_profile.profileimg = image
-            user_profile.name = name
-            user_profile.bio = bio
-            user_profile.location = location
-            user_profile.save()
+            curr_user_profile.profileimg = image
+            curr_user_profile.name = name
+            curr_user_profile.bio = bio
+            curr_user_profile.location = location
+            curr_user_profile.save()
         if (req.FILES.get('image') != None):
             image = req.FILES.get('image')
             bio = req.POST['bio']
             location = req.POST['location']
             name = req.POST['name']
 
-            user_profile.profileimg = image
-            user_profile.name = name
-            user_profile.bio = bio
-            user_profile.location = location
-            user_profile.save()
+            curr_user_profile.profileimg = image
+            curr_user_profile.name = name
+            curr_user_profile.bio = bio
+            curr_user_profile.location = location
+            curr_user_profile.save()
         return redirect('settings')
-    return render(req, 'settings.html', {'user_profile': user_profile})
+    return render(req, 'settings.html', {'curr_user_profile': curr_user_profile})
 
 def signin(req):
     if(req.method=='POST'):

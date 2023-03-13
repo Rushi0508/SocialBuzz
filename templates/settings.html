@@ -21,7 +21,7 @@
               {% csrf_token %}
               <div class="mb-3">
                 <div class="text-center">
-                    <img width="200" height="200" class="rounded-circle" src="{{user_profile.profileimg.url}}" /><br>
+                    <img width="200" height="200" class="rounded-circle" src="{{curr_user_profile.profileimg.url}}" /><br>
                     <button class="btn btn-success my-2">Update</button>
                     <div class="form-file custom-file d-none">
                         <input class="form-control" type="file" name="image" id="image">
