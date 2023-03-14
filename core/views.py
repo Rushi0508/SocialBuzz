@@ -90,6 +90,14 @@ def likepost(req):
         post.save()
         return HttpResponse(post.likes)
         # return redirect('/')
+@login_required(login_url='/signin')
+def search(req):
+    text = req.GET['text']
+    if(text == ""):
+        return None
+    user_filter = User.objects.filter(username__contains=text).values('username')
+    data = {'user_filter': list(user_filter)}
+    return HttpResponse(json.dumps({'data': data}), content_type="application/json")
 
 @login_required(login_url='/signin')
 def follow(req):
@@ -109,6 +117,13 @@ def follow(req):
         followerCount = FollowerCount.objects.filter(user=user)
         data = {'followerCount': len(followerCount), 'isFollowed': True}
         return HttpResponse(json.dumps({'data': data}), content_type="application/json");
+
+@login_required(login_url='/signin')
+def delete(req,pk):
+    user_posts = Post.objects.filter(id=pk)
+    user_posts.delete()
+    curr_user = req.user.username
+    return redirect('/profile/'+curr_user)
 
 @login_required(login_url='/signin')
 def settings(req):
@@ -147,7 +162,7 @@ def settings(req):
             curr_user_profile.bio = bio
             curr_user_profile.location = location
             curr_user_profile.save()
-        return redirect('settings')
+        return redirect('profile/'+curr_user_profile.user.username)
     return render(req, 'settings.html', {'curr_user_profile': curr_user_profile})
 
 def signin(req):

@@ -30,6 +30,14 @@
     img{
         object-fit: cover;
     }
+    .search-results{
+        position: absolute;
+        top: 50px;
+        left: 208px;
+        text-align: left;
+        padding: 10px;
+        width: 200px;
+    }
 </style>
 
 <body>
@@ -46,7 +54,8 @@
                     <form action="" method="GET" class="mx-4">
                         {% csrf_token %}
                         <div class="input-group">
-                            <input type="text" class="form-control" name="q" placeholder="Search Users...">
+                            <input type="text" class="form-control form-submit search-input q" id="search-input" name="q" placeholder="Search Users..." autocomplete="off">
+                            <input type="hidden" class="current-user" value="{{curr_user_profile.user.username}}" placeholder="Search Users...">
                             <div class="input-group-append">
                                 <button class="btn btn-secondary rounded-0 rounded-right" type="submit">
                                     <i class="fa fa-search"></i>
@@ -54,6 +63,9 @@
                             </div>
                         </div>
                     </form>
+                    <ul class="px-2 py-1 search-results">
+                        
+                    </ul>
                 </div>
                 <div class="navbar-nav ml-auto d-flex align-items-center">
                     <button data-toggle="modal" data-target="#uploadModal"
@@ -100,11 +112,51 @@
             </div>
         </div>
     </nav>
-    <script type="text/javascript">
-        function form_submit() {
-          document.getElementById("search_form").submit();
-         }
-         
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+    <script>
+        window.addEventListener('click', function(e){   
+            if (document.getElementById('search-input').contains(e.target)){
+                document.getElementsByClassName('search-results')[0].style.display = "block"
+            } else{
+                document.getElementsByClassName('search-results')[0].style.display = "none"
+            }
+        });
+        $(document).on('keyup', '.search-input', function(e) {
+            e.stopPropagation();
+            // var $form = $(this).closest(".form-submit");
+            var text = $('.search-input').val()
+            var current_user = $('.current-user').val()
+            $.ajax(
+            {
+                type:"GET",
+                url: "/search",
+                data:{
+                       text : text
+                },
+                success: function( data ) 
+                {
+                    users = []
+                    for(let user of data.data.user_filter){
+                        if(user.username == "admin" || user.username===current_user){
+                            continue;
+                        }
+                        users.push(user.username)
+                    }
+                    
+                    if(users.length>0){
+                        $('.search-results').empty()
+                        $('.search-results').css("background-color", "white");
+                        for(let user of users){
+                            $('.search-results').append("<a class='text-dark' href='/profile/" + user + "'><li>@"+ user +"</li></a>")
+                        }
+                    }else{
+                        $('.search-results').empty()
+                        $('.search-results').css("background-color", "white");
+                        $('.search-results').append("<li>No user found</li>")
+                    }
+                }
+            })
+        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
         integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
