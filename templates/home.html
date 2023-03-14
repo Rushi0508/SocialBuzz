@@ -48,6 +48,7 @@
                                 <a class="text-dark"><i class="fa fa-thumbs-up likebutton" aria-hidden="true"></i></a>
                                 <input type="hidden" class="post-id" value="{{post.id}}">
                                 <i class="far fa-comment-o ml-2" aria-hidden="true"></i>
+                                <a href="{{post.image.url}}" download class="float-right text-dark"><i class="fa fa-download" aria-hidden="true"></i></a>
                             </div>
                             <p class="mb-1" id="likes-{{post.id}}">
                                 {% if post.likes == 0 %}
