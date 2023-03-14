@@ -5,15 +5,26 @@ from django.contrib import messages
 from .models import Profile,Post,LikePost,FollowerCount
 from django.contrib.auth.decorators import login_required
 import json
+from itertools import chain
 # Create your views here.
 
 @login_required(login_url='/signin')
 def index(req):
     curr_user_object = User.objects.get(username=req.user.username)
     curr_user_profile = Profile.objects.get(user=curr_user_object)
-    posts = Post.objects.all();
-    return render(req, 'home.html', {'curr_user_profile' : curr_user_profile, 'posts' : posts})
+    user_following_list = []
+    feed = []
 
+    user_following = FollowerCount.objects.filter(follower=req.user.username)
+    for users in user_following:
+        user_following_list.append(users.user)
+    
+    for usernames in user_following_list:
+        feed_lists = Post.objects.filter(user=usernames)
+        feed.append(feed_lists)
+    
+    feed_list = list(chain(*feed))
+    return render(req, 'home.html', {'curr_user_profile' : curr_user_profile, 'posts' : feed_list})
 
 
 @login_required(login_url='/signin')
