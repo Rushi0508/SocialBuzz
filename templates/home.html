@@ -25,6 +25,17 @@
     .likebutton{
         cursor: pointer;
     }
+    @media screen and (max-width: 995px){
+        .row{
+            display: block !important;
+        }
+        .col-7{
+            width: 100% !important;
+        }
+        .col-5{
+            width: 100% !important;
+        }
+    }
 </style>
 <body>
 
@@ -90,7 +101,9 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <button class="btn btn-outline-info rounded-pill py-1 float-right">View User</button>
+                                    <a href="/profile/{{suggestion.user}}" class="mx-2">
+                                        <button class="btn btn-outline-info rounded-pill py-1 float-right">View User</button>
+                                    </a>
                                 </div>
                             </li>
                             {% endfor %}
