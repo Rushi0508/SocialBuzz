@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <style>
-    .card-body img{
+    .posts img{
         width: 100%;
         height: 600px;
     }
@@ -37,7 +37,7 @@
                     <div class="card-header">
                         <b><a class="text-dark" href="/profile/{{post.user}}">@{{post.user}}</a></span></b>
                     </div>
-                    <div class="card-body p-0">
+                    <div class="card-body p-0 posts">
                         <a href="{{post.image.url}}">  
                             <img src="{{post.image.url}}" alt="">
                         </a>
@@ -74,8 +74,27 @@
                     <div class="card-header bg-light">
                         <b>Suggestions for you</b>
                     </div>
-                    <div class="card-body p-0">
-                        
+                    <div class="card-body p-0 suggestion">
+                        <ul class="list-group list-group-flush">
+                            {% for suggestion in suggestions_profile %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <div class="d-flex align-items-center">
+                                    <a href="/profile/{{suggestion.user}}" class="mx-2">
+                                        <img src="{{suggestion.profileimg.url}}" class="rounded-circle" width="35" height="35">
+                                    </a>
+                                    <div class="d-flex flex-column">
+                                        <a href="/profile/{{suggestion.user}}" class="text-dark">
+                                            <span class="block capitalize font-semibold"> @{{suggestion.user}} </span>
+                                        </a>
+                                        <small class="text-secondary"> {{suggestion.name}} </small>
+                                    </div>
+                                </div>
+                                <div>
+                                    <button class="btn btn-outline-info rounded-pill py-1 float-right">View User</button>
+                                </div>
+                            </li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>

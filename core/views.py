@@ -4,7 +4,7 @@ from django.http import HttpResponse
 from django.contrib import messages
 from .models import Profile,Post,LikePost,FollowerCount
 from django.contrib.auth.decorators import login_required
-import json
+import json, random
 from itertools import chain
 # Create your views here.
 
@@ -24,7 +24,30 @@ def index(req):
         feed.append(feed_lists)
     
     feed_list = list(chain(*feed))
-    return render(req, 'home.html', {'curr_user_profile' : curr_user_profile, 'posts' : feed_list})
+
+    # User Suggestions
+    all_users = User.objects.all()
+    user_following_all = []
+    for user in user_following:
+        user_list = User.objects.get(username=user.user)
+        user_following_all.append(user_list)
+    
+    new_suggestions_list = [x for x in list(all_users) if(x not in list(user_following_all))]
+    current_user = User.objects.filter(username=req.user.username)
+    final_suggestions_list = [x for x in list(new_suggestions_list) if(x not in list(current_user))]
+    random.shuffle(final_suggestions_list)
+
+    sugg_profile = []
+    sugg_profile_list = []
+    for users in final_suggestions_list:
+        sugg_profile.append(users.id)
+    for ids in sugg_profile:
+        profile_lists = Profile.objects.filter(id_user=ids)
+        sugg_profile_list.append(profile_lists)
+    
+    final_sugg_profile_list = list(chain(*sugg_profile_list))
+
+    return render(req, 'home.html', {'curr_user_profile' : curr_user_profile, 'posts' : feed_list, 'suggestions_profile' : final_sugg_profile_list})
 
 
 @login_required(login_url='/signin')
