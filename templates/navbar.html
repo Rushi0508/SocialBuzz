@@ -38,6 +38,16 @@
         padding: 10px;
         width: 200px;
     }
+    #postimg{
+        width: 100%;
+        height: 500px;
+    }
+    @media screen and (max-width: 500px){
+        #postimg{
+            height: 400px;
+        }
+    }
+
 </style>
 
 <body>
@@ -84,8 +94,10 @@
                                 <form action="/upload" id="search_form" method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
                                     <div class="modal-body">
-                                        <div class="form-file custom-file mb-3">
-                                            <input class="form-control" required type="file" name="image_upload" id="image">
+                                        <img src="" alt="" class="d-none" id="postimg">
+                                        <div class="form-file custom-file m-2 text-center">
+                                            <label class="btn-sm btn btn-outline-success" for="post-file">Upload Post</label>
+                                            <input class="form-control d-none" type="file" name="image" id="post-file">
                                         </div>
                                         <textarea class="form-control" name="caption" cols="30" rows="2" placeholder="Caption"></textarea>
                                     </div>
@@ -114,6 +126,14 @@
     </nav>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
     <script>
+        const postimg = document.getElementById("postimg");
+        const postfile = document.getElementById("post-file");
+
+        postfile.onchange = ()=>{
+            console.log("CHanged");
+            postimg.src = URL.createObjectURL(postfile.files[0]);
+            postimg.classList.remove("d-none")
+        }
         window.addEventListener('click', function(e){   
             if (document.getElementById('search-input').contains(e.target)){
                 document.getElementsByClassName('search-results')[0].style.display = "block"

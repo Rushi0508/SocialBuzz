@@ -21,10 +21,10 @@
               {% csrf_token %}
               <div class="mb-3">
                 <div class="text-center">
-                    <img width="200" height="200" class="rounded-circle" src="{{curr_user_profile.profileimg.url}}" /><br>
-                    <button class="btn btn-success my-2">Update</button>
-                    <div class="form-file custom-file d-none">
-                        <input class="form-control" type="file" name="image" id="image">
+                    <img width="200" id="profileimg" height="200" class="rounded-circle" src="{{curr_user_profile.profileimg.url}}" /><br>
+                    <div class="form-file custom-file mt-2">
+                        <label class=" btn-sm btn btn-outline-success" for="image">Update Image</label>
+                        <input class="form-control d-none" type="file" name="image" id="image">
                     </div>
                 </div>
               </div>
@@ -67,13 +67,12 @@
 
   </div>
   <script>
-    const update = document.querySelector('.btn-success');
-    const file = document.querySelector('.d-none')
-    update.addEventListener("click", (e)=>{
-        e.preventDefault();
-        console.log("HII");
-        file.classList.remove('d-none');
-    })
+    const profileimg = document.getElementById("profileimg");
+    const inputimg = document.getElementById("image");
+
+    inputimg.onchange = ()=>{
+      profileimg.src = URL.createObjectURL(inputimg.files[0]);
+    }
   </script>
 <script src="../static/js/validateForms.js"></script>
 </body>
