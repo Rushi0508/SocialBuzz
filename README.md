@@ -21,7 +21,13 @@
 
 ## Tech Stack 👨‍💻
 
-
+![Django](https://img.shields.io/badge/django-%23323330.svg?style=for-the-badge&logo=django&logoColor=%23F7DF1E)
+![Python](https://img.shields.io/badge/MongoDB-%234ea94b.svg?style=for-the-badge&logo=mongodb&logoColor=white)
+![Bootstrap](https://img.shields.io/badge/node.js-6DA55F?style=for-the-badge&logo=node.js&logoColor=white)
+![JQuery](https://img.shields.io/badge/JWT-black?style=for-the-badge&logo=JSON%20web%20tokens)
+![HTML](https://img.shields.io/badge/rest%20api%20-%23323330.svg?style=for-the-badge&logo=rest&logoColor=%23F7DF1E)
+![CSS](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)
+![JAVASCRIPT](https://img.shields.io/badge/Twilio-F22F46?style=for-the-badge&logo=Twilio&logoColor=white)
 
 ---
 
