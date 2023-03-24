@@ -1,6 +1,4 @@
-<div align="center">
 # Social Buzz📱
-</div>
 
 ## What it does ⚙️
 - SocialBuzz a platform designed to connect people around. It allows users to create profiles, follow each other, share photos, and engage in discussions with other users.
