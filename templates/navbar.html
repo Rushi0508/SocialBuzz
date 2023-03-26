@@ -35,19 +35,29 @@
         top: 50px;
         left: 208px;
         text-align: left;
-        padding: 10px;
         width: 200px;
+        list-style: none;
+        border-radius: 10px;
     }
     #postimg{
         width: 100%;
         height: 500px;
+    }
+    @media screen and (max-width: 800px){
+        .navbar-collapse > div,.navbar-collapse>li{
+            margin-block: 10px;
+        }
+        .search-results{
+            top: 56%;
+            left: 20%;
+            list-style: none;
+        }
     }
     @media screen and (max-width: 500px){
         #postimg{
             height: 400px;
         }
     }
-
 </style>
 
 <body>
@@ -66,7 +76,7 @@
                         <div class="input-group">
                             <input type="text" class="form-control form-submit search-input q" id="search-input" name="q" placeholder="Search Users..." autocomplete="off">
                             <input type="hidden" class="current-user" value="{{curr_user_profile.user.username}}" placeholder="Search Users...">
-                            <div class="input-group-append">
+                            <div class="input-group-append srch-btn">
                                 <button class="btn btn-secondary rounded-0 rounded-right" type="submit">
                                     <i class="fa fa-search"></i>
                                 </button>
@@ -167,7 +177,7 @@
                         $('.search-results').empty()
                         $('.search-results').css("background-color", "white");
                         for(let user of users){
-                            $('.search-results').append("<a class='text-dark' href='/profile/" + user + "'><li>@"+ user +"</li></a>")
+                            $('.search-results').append("<a class='text-dark py-4' href='/profile/" + user + "'><li>@"+ user +"</li></a>")
                         }
                     }else{
                         $('.search-results').empty()
